@@ -42,5 +42,5 @@ The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` fil
 # How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/laptop-price-prediction.git
+   'git clone https://github.com/zaralrubaie/laptop-prices-prediction-.git'
 
