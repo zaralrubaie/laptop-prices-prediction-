@@ -1,7 +1,7 @@
-#Laptop Prices Prediction using Pandas
+# Laptop Prices Prediction using Pandas
 This project focuses on predicting laptop prices based on various features using Python and Pandas. It provides a complete workflow from data cleaning and preprocessing to analysis and model preparation. The goal is to gain insights into what influences laptop pricing and to potentially build a prediction model for future pricing trends.
 
-#project Structure
+## project Structure
 PTOP PRICES PREDECTION.csv # Main dataset containing laptop specs and prices
 LAPTOP_PRICE_PREDICTION_SUMMARY.txt # Text summary explaining analysis and results
 laptop-prices-prediction-by-pandas.ipynb # Jupyter Notebook with full code and analysis
@@ -28,12 +28,13 @@ The dataset contains various features such as:
 - Visualize key relationships
 - Explore basic predictive modeling ideas
 
-#libraries Used
+## libraries Used
 - Python
 - Pandas
 - NumPy
 - Matplotlib / Seaborn (for visualization)
-#Summary
+  
+## Summary
 The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` file, offering insights into:
 - Key features affecting laptop prices
 - Data distribution and outlier detection
