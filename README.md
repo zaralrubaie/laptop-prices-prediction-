@@ -40,8 +40,8 @@ The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` fil
 - Data distribution and outlier detection
 - Steps taken for data cleaning and feature engineering
 
-# How to Run
+##  How to Run
 1. Clone the repository:
-   ```bash
-   'git clone https://github.com/zaralrubaie/laptop-prices-prediction-.git'
-
+ ```bash
+   git clone https://github.com/zaralrubaie/laptop-prices-prediction-.git
+```
