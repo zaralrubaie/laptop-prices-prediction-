@@ -42,3 +42,22 @@ The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` fil
  ```bash
    git clone https://github.com/zaralrubaie/laptop-prices-prediction-.git
 ```
+
+## Laptop Price Prediction Model
+- Model Used: RandomForestRegressor
+- Cross-Validation R2 Scores: [0.7342, 0.7951, 0.8191, 0.7205, 0.8104]
+- Mean CV R2 Score: 0.776
+- Test Set R2 Score: 0.814
+
+## Project Description:
+This project predicts laptop prices based on various features such as
+company, product type, CPU details, RAM, screen resolution, storage,
+and GPU information. The data preprocessing pipeline includes feature
+engineering, handling skewness, and encoding categorical variables.
+The model is trained and evaluated using cross-validation to ensure
+robustness.
+
+- Author: Zahraa Alrubaie
+- Date: 04/06/2025
+
+Thank you for reviewing the project!
