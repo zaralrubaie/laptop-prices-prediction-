@@ -49,15 +49,9 @@ The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` fil
 - Mean CV R2 Score: 0.776
 - Test Set R2 Score: 0.814
 
-## Project Description:
-This project predicts laptop prices based on various features such as
-company, product type, CPU details, RAM, screen resolution, storage,
-and GPU information. The data preprocessing pipeline includes feature
-engineering, handling skewness, and encoding categorical variables.
-The model is trained and evaluated using cross-validation to ensure
-robustness.
-
-- Author: Zahraa Alrubaie
-- Date: 04/06/2025
+## Project Highlights:
+- Predicts laptop prices based on features such as company, product type, CPU, RAM, storage, GPU, and display
+- Includes data preprocessing: feature engineering, handling skewness, and encoding categorical variables
+- Uses cross-validation to ensure model robustness
 
 Thank you for reviewing the project!
