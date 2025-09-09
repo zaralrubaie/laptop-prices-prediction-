@@ -7,59 +7,84 @@ Original file is located at
     https://colab.research.google.com/drive/18MzsGOrSe24BEis1l8TCGwhnwXZCjyag
 """
 
-#importing neccessary libraries
+# =========================
+# Import necessary libraries
+# =========================
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-df=pd.read_csv('/kaggle/input/laptop-prices/Laptop-Price.csv')
-print(f'data shape',df.shape)
+
+# =========================
+# Load dataset
+# =========================
+df = pd.read_csv('/kaggle/input/laptop-prices/Laptop-Price.csv')
+print(f'Data shape: {df.shape}')
 df.head()
 
+# =========================
+# Check for missing values
+# =========================
 df.isnull().sum()
 
-df=df.drop(['Unnamed: 16'],axis=1)
-
+# Drop unnecessary columns
+df = df.drop(['Unnamed: 16'], axis=1)
 df.info()
 
-df.columns=df.columns.str.lower()
+# Lowercase all column names for consistency
+df.columns = df.columns.str.lower()
 df.head()
 
-#some feature exraction
+# =========================
+# Feature extraction / engineering
+# =========================
+# Extract CPU generation from CPU model
 df['cpu_gen'] = df['cpu model'].str.extract(r'(\d{1,2})', expand=False).astype(float)
+
+# Detect if laptop has dedicated GPU
 df['is_dedicated_gpu'] = df['gpu brand'].apply(lambda x: 0 if 'Intel' in x else 1)
+
+# Detect touchscreen and full HD
 df['is_touch'] = df['screenresolution'].str.contains('Touchscreen', case=False, na=False).astype(int)
 df['is_full_hd'] = df['screenresolution'].str.contains('1920x1080').astype(int)
+
+# Extract screen resolution
 df['res_x'] = df['screenresolution'].str.extract(r'(\d+)x', expand=False).astype(float)
 df['res_y'] = df['screenresolution'].str.extract(r'x(\d+)', expand=False).astype(float)
 df['pixel_count'] = df['res_x'] * df['res_y']
+
+# Convert RAM to numeric
 df['ram_gb'] = df['ram'].str.replace('GB', '').astype(int)
 
+# Group top companies, rest as 'Other'
 top_companies = df['company'].value_counts().nlargest(5).index
 df['company_grouped'] = df['company'].apply(lambda x: x if x in top_companies else 'Other')
 
+# Convert CPU rate to numeric
 df['cpu_rate_ghz'] = df['cpu rate'].str.replace('GHz', '', regex=False).str.strip().astype(float)
 
+# Drop columns we no longer need
 df.drop(['cpu model', 'gpu brand', 'screenresolution', 'ram', 'company','cpu rate'], axis=1, inplace=True)
 df.head()
 
-df['typename']=df['typename'].map({'Notebook':0,'Gaming':1,'Ultrabook':2,'2 in 1 Convertible':3,'Workstation':4,'Netbook':5})
-df['company_grouped']=df['company_grouped'].map({'Dell':0,'Lenovo':1,'HP':2,'Other':3,'Asus':4,'Acer':5})
-df['cpu brand']=df['cpu brand'].map({'Intel':0,'AMD':1})
+# Map categorical columns to numeric
+df['typename'] = df['typename'].map({
+    'Notebook':0,'Gaming':1,'Ultrabook':2,'2 in 1 Convertible':3,'Workstation':4,'Netbook':5})
+df['company_grouped'] = df['company_grouped'].map({'Dell':0,'Lenovo':1,'HP':2,'Other':3,'Asus':4,'Acer':5})
+df['cpu brand'] = df['cpu brand'].map({'Intel':0,'AMD':1})
 df.head()
 
+# Encode remaining categorical features using frequency encoding
 for col in ['product', 'opsys', 'gpu model']:
     freq = df[col].value_counts(normalize=True)
     df[f'{col}_freq'] = df[col].map(freq)
-df=df.drop(['product','opsys','gpu model'],axis=1)
+df = df.drop(['product','opsys','gpu model'], axis=1)
 df.head()
 
-df.select_dtypes(include='object').columns
-
+# =========================
+# Handle skewness in numerical columns
+# =========================
 from scipy.stats import skew
-cols_to_check_skew = [
-    'inches', 'cpu_rate_ghz', 'price_euros',
-    'res_x', 'res_y', 'pixel_count', 'ram_gb'
-]
+cols_to_check_skew = ['inches', 'cpu_rate_ghz', 'price_euros','res_x', 'res_y', 'pixel_count', 'ram_gb']
 skewness = df[cols_to_check_skew].apply(skew).sort_values(ascending=False)
 print("Skewness of numerical features:\n", skewness)
 
@@ -67,6 +92,9 @@ skewed_cols = ['pixel_count', 'ram_gb', 'res_x', 'res_y']
 for col in skewed_cols:
     df[col + '_log'] = np.log1p(df[col])
 
+# =========================
+# Remove outliers using IQR
+# =========================
 def remove_outliers_iqr(df, columns):
     for col in columns:
         Q1 = df[col].quantile(0.25)
@@ -76,57 +104,73 @@ def remove_outliers_iqr(df, columns):
         upper_bound = Q3 + 1.5 * IQR
         df = df[(df[col] >= lower_bound) & (df[col] <= upper_bound)]
     return df
+
 numerical_cols = df.select_dtypes(include=['int64', 'float64']).columns
 df_cleaned = remove_outliers_iqr(df, numerical_cols)
 
-df=df.dropna()
+# Drop any remaining missing values
+df = df.dropna()
 
+# =========================
+# Machine Learning Pipeline
+# =========================
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
 
+# Features and target
 X = df.drop(columns='price_euros')
 y = df['price_euros']
 
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Pipeline with scaling and model
 pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('model', RandomForestRegressor(random_state=42))
 ])
 
+# Cross-validation
 cv_scores = cross_val_score(pipeline, X_train, y_train, cv=5, scoring='r2')
 print("Cross-Validation R2 Scores:", cv_scores)
 print("Mean CV R2 Score:", cv_scores.mean())
 
+# Fit the pipeline
 pipeline.fit(X_train, y_train)
 
+# Predict on test set
 y_pred = pipeline.predict(X_test)
 test_r2 = r2_score(y_test, y_pred)
 print("Test Set R2 Score:", test_r2)
 
-y_pred_test = pipeline.predict(X_test)
-
-df_test_results = pd.DataFrame({
-    'Actual': y_test,
-    'Predicted': y_pred_test
-})
-
+# Save predictions
+df_test_results = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
 df_test_results.to_csv('test_predictions.csv', index=False)
 
+# =========================
+# SHAP analysis (interpret model predictions)
+# =========================
 import shap
 
-preprocessor = pipeline[:-1]
-
+preprocessor = pipeline[:-1]  # all steps except the model
 model = pipeline.named_steps['model']
+
 X_test_processed = preprocessor.transform(X_test)
 explainer = shap.Explainer(model)
 shap_values = explainer(X_test_processed)
+
+# Summary plot
 shap.summary_plot(shap_values, X_test_processed)
+
+# Waterfall plot for first instance
 shap.plots.waterfall(shap_values[0])
 
+# =========================
+# Save project summary
+# =========================
 txt_content = """
 Laptop Price Prediction Model
 
@@ -149,5 +193,6 @@ Date: 04/06/2025
 
 Thank you for reviewing the project!
 """
+
 with open('LAPTOP_PRICE_PREDICTION_SUMMARY.txt', 'w') as f:
     f.write(txt_content)
