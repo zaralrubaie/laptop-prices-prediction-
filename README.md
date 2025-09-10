@@ -3,10 +3,10 @@ This project predicts laptop prices based on various features using Python and P
 
 ## project Structure
 ``` 
-PTOP_PRICES_PREDICTION.csv          # Main dataset containing laptop specs and prices
-LAPTOP_PRICE_PREDICTION_SUMMARY.txt # Text summary explaining analysis and insights
-laptop-prices-prediction-by-pandas.ipynb # Jupyter Notebook with full code and analysis
-README.md                            # Project documentation
+PTOP_PRICES_PREDICTION.csv            # Main dataset containing laptop specs and prices
+LAPTOP_PRICE_PREDICTION_SUMMARY.txt   # Text summary explaining analysis and insights
+laptop-prices-prediction-by-pandas.py # Jupyter Notebook with full code and analysis
+README.md                             # Project documentation
 ```
 ## 📊 Dataset Overview
 - Brand
