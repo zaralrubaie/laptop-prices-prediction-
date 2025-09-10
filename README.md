@@ -1,14 +1,7 @@
 # Laptop Price Prediction Using Pandas
 This project predicts laptop prices based on various features using Python and Pandas. It demonstrates a complete workflow: data cleaning, preprocessing, exploratory analysis, feature engineering, and predictive modeling. The goal is to understand what drives laptop prices and build a model that can predict prices for new laptops.
 
-## project Structure
-``` 
-PTOP_PRICES_PREDICTION.csv            # Main dataset containing laptop specs and prices
-LAPTOP_PRICE_PREDICTION_SUMMARY.txt   # Text summary explaining analysis and insights
-laptop-prices-prediction-by-pandas.py # Jupyter Notebook with full code and analysis
-README.md                             # Project documentation
-```
-## 📊 Dataset Overview
+##  Dataset Overview
 - Brand
 - Processor
 - RAM size and type
@@ -18,7 +11,7 @@ README.md                             # Project documentation
 - Operating System
 - Price (Target Variable)
 
-## 🔍 Project Goals
+##  Project Goals
 - Clean and preprocess real-world laptop price data
 - Analyze correlations between features and price
 - Handle categorical variables
@@ -54,4 +47,9 @@ The project summarizes findings in the `LAPTOP_PRICE_PREDICTION_SUMMARY.txt` fil
 - Includes data preprocessing: feature engineering, handling skewness, and encoding categorical variables
 - Uses cross-validation to ensure model robustness
 
-Thank you for reviewing the project!
+## project Structure
+``` 
+PTOP_PRICES_PREDICTION.csv            # Main dataset containing laptop specs and prices
+LAPTOP_PRICE_PREDICTION_SUMMARY.txt   # Text summary explaining analysis and insights
+laptop-prices-prediction-by-pandas.py # Jupyter Notebook with full code and analysis
+README.md                             # Project documentation
